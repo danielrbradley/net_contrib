@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MaybeTests\Flatten.cs" />
     <Compile Include="MaybeTests\Nullable.cs" />
     <Compile Include="MaybeTests\Match.cs" />
     <Compile Include="MaybeTests\Select.cs" />

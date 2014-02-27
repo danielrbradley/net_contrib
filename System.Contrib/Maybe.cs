@@ -15,46 +15,57 @@
             return new Maybe<TValue>(value);
         }
 
-        public static Maybe<TValueResult> Select<TValue, TValueResult>(this Maybe<TValue> source, Func<TValue, TValueResult> selector)
+        public static Maybe<TValueResult> Select<TValue, TValueResult>(
+            this Maybe<TValue> source,
+            Func<TValue, TValueResult> selector)
         {
             return source.IsSome ? new Maybe<TValueResult>(selector(source.Value)) : new Maybe<TValueResult>();
         }
 
-        public static TValueResult Select<TValue, TValueResult>(this Maybe<TValue> maybe, Func<TValue, TValueResult> selector, TValueResult defaultValue)
+        public static TValueResult Select<TValue, TValueResult>(
+            this Maybe<TValue> source,
+            Func<TValue, TValueResult> selector,
+            TValueResult defaultValue)
         {
-            return maybe.IsSome ? selector(maybe.Value) : defaultValue;
+            return source.IsSome ? selector(source.Value) : defaultValue;
         }
 
-        public static TValueResult Select<TValue, TValueResult>(this Maybe<TValue> maybe, Func<TValue, TValueResult> selector, Func<TValueResult> defaultValue)
+        public static TValueResult Select<TValue, TValueResult>(
+            this Maybe<TValue> source,
+            Func<TValue, TValueResult> selector,
+            Func<TValueResult> defaultValue)
         {
-            return maybe.IsSome ? selector(maybe.Value) : defaultValue();
+            return source.IsSome ? selector(source.Value) : defaultValue();
         }
 
-        public static TValue ValueOrDefault<TValue>(this Maybe<TValue> maybe, TValue defaultValue = default(TValue))
+        public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, TValue defaultValue = default(TValue))
         {
-            if (maybe.IsSome)
+            if (source.IsSome)
             {
-                return maybe.Value;
+                return source.Value;
             }
 
             return defaultValue;
         }
 
-        public static TValue ValueOrDefault<TValue>(this Maybe<TValue> maybe, Func<TValue> defaultValue)
+        public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, Func<TValue> defaultValue)
         {
-            if (maybe.IsSome)
+            if (source.IsSome)
             {
-                return maybe.Value;
+                return source.Value;
             }
 
             return defaultValue();
         }
 
-        public static TValueResult Match<TValue, TValueResult>(this Maybe<TValue> maybe, Func<TValue, TValueResult> withSome, Func<TValueResult> withNone)
+        public static TValueResult Match<TValue, TValueResult>(
+            this Maybe<TValue> source,
+            Func<TValue, TValueResult> withSome,
+            Func<TValueResult> withNone)
         {
-            if (maybe.IsSome)
+            if (source.IsSome)
             {
-                return withSome(maybe.Value);
+                return withSome(source.Value);
             }
 
             return withNone();
@@ -82,52 +93,76 @@
             return Maybe.Some(obj);
         }
 
-        public static TValue? ToNullable<TValue>(this Maybe<TValue> maybe)
+        public static TValue? ToNullable<TValue>(this Maybe<TValue> source)
             where TValue : struct
         {
-            if (maybe.IsSome)
+            if (source.IsSome)
             {
-                return maybe.Value;
+                return source.Value;
             }
 
             return null;
         }
 
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<TValue>> maybe)
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<TValue>> source)
         {
-            return maybe.FlattenInternal();
-        }
-
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<TValue>>> maybe)
-        {
-            return maybe.FlattenInternal().Flatten();
-        }
-
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> maybe)
-        {
-            return maybe.FlattenInternal().Flatten();
-        }
-
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> maybe)
-        {
-            return maybe.FlattenInternal().Flatten();
-        }
-
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> maybe)
-        {
-            return maybe.FlattenInternal().Flatten();
-        }
-
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> maybe)
-        {
-            return maybe.FlattenInternal().Flatten();
-        }
-
-        private static Maybe<TValue> FlattenInternal<TValue>(this Maybe<Maybe<TValue>> maybe)
-        {
-            if (maybe.IsSome && maybe.Value.IsSome)
+            if (source.IsSome && source.Value.IsSome)
             {
-                return Some(maybe.Value.Value);
+                return Some(source.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<TValue>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value.Value.Value);
             }
 
             return None<TValue>();
@@ -224,7 +259,7 @@
             }
         }
 
-        private bool Equals(Maybe<TValue> other)
+        public bool Equals(Maybe<TValue> other)
         {
             return this.isSome.Equals(other.isSome) && EqualityComparer<TValue>.Default.Equals(this.value, other.value);
         }
