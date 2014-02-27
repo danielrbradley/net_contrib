@@ -35,7 +35,7 @@
             Func<TValue, TValueResult> selector,
             Func<TValueResult> defaultValue)
         {
-            return source.IsSome ? selector(source.Value) : defaultValue();
+            return source.Match(selector, defaultValue);
         }
 
         public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, TValue defaultValue = default(TValue))
@@ -69,6 +69,21 @@
             }
 
             return withNone();
+        }
+
+        public static void Match<TValue>(
+            this Maybe<TValue> source,
+            Action<TValue> withSome,
+            Action withNone)
+        {
+            if (source.IsSome)
+            {
+                withSome(source.Value);
+            }
+            else
+            {
+                withNone();
+            }
         }
 
         public static Maybe<TValue> FromNullable<TValue>(TValue? obj)
@@ -236,6 +251,10 @@
             return "None";
         }
 
+        public bool Equals(Maybe<TValue> other)
+        {
+            return this.isSome.Equals(other.isSome) && EqualityComparer<TValue>.Default.Equals(this.value, other.value);
+        }
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -257,11 +276,6 @@
             {
                 return (EqualityComparer<TValue>.Default.GetHashCode(this.value) * 397) ^ this.isSome.GetHashCode();
             }
-        }
-
-        public bool Equals(Maybe<TValue> other)
-        {
-            return this.isSome.Equals(other.isSome) && EqualityComparer<TValue>.Default.Equals(this.value, other.value);
         }
     }
 }
