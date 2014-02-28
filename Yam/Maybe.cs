@@ -148,7 +148,164 @@
             this Maybe<TValue> source,
             Func<TValue, Maybe<TResult>> selector)
         {
-            return source.Select(selector).Flatten();
+            if (source.IsSome)
+            {
+                var result = selector(source.Value);
+                if (result.IsSome)
+                {
+                    return result;
+                }
+            }
+
+            return Maybe.None<TResult>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<TValue>> source)
+        {
+            if (source.IsSome && source.Value.IsSome)
+            {
+                return Some(source.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<TValue>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
+        }
+
+        /// <summary>
+        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
+        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The inner-most type of the value of the <paramref name="source"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
+        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
+        /// </returns>
+        public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> source)
+        {
+            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome
+                && source.Value.Value.Value.Value.Value.Value.IsSome)
+            {
+                return Some(source.Value.Value.Value.Value.Value.Value.Value);
+            }
+
+            return None<TValue>();
         }
 
         /// <summary>
@@ -333,154 +490,6 @@
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<TValue>> source)
-        {
-            if (source.IsSome && source.Value.IsSome)
-            {
-                return Some(source.Value.Value);
-            }
-
-            return None<TValue>();
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<TValue>>> source)
-        {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome)
-            {
-                return Some(source.Value.Value.Value);
-            }
-
-            return None<TValue>();
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> source)
-        {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome)
-            {
-                return Some(source.Value.Value.Value.Value);
-            }
-
-            return None<TValue>();
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> source)
-        {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome)
-            {
-                return Some(source.Value.Value.Value.Value.Value);
-            }
-
-            return None<TValue>();
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> source)
-        {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome)
-            {
-                return Some(source.Value.Value.Value.Value.Value.Value);
-            }
-
-            return None<TValue>();
-        }
-
-        /// <summary>
-        /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
-        /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </summary>
-        /// <typeparam name="TValue">
-        /// The inner-most type of the value of the <paramref name="source"/>.
-        /// </typeparam>
-        /// <param name="source">
-        /// A nested <see cref="System.Maybe&lt;TValue&gt;"/> whose type argument is
-        /// also a <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Nullable&lt;TValue&gt;"/> whose type argument is TValue.
-        /// </returns>
-        public static Maybe<TValue> Flatten<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> source)
-        {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.Value.Value.IsSome)
-            {
-                return Some(source.Value.Value.Value.Value.Value.Value.Value);
-            }
-
-            return None<TValue>();
         }
     }
 

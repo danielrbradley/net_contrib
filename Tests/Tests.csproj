@@ -50,10 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Flatten.cs" />
+    <Compile Include="SelectMany.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="Match.cs" />
-    <Compile Include="SelectMany.cs" />
     <Compile Include="Select.cs" />
     <Compile Include="ValueOrDefault.cs" />
     <Compile Include="Core.cs" />
