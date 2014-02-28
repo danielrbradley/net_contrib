@@ -41,28 +41,9 @@ You can see if a maybe has a value by checking the "IsSome" or "IsNone" properti
 Manipulating a Maybe
 -----------------------
 
-### Select
-
-Much like using LINQ on enumerable collection, you can use LINQ on a maybe to transform any value that might be inside the maybe.
-
-    Maybe.Some(42).Select(x => x + 1) == Maybe.Some(43)
-
-    Maybe.Some(17).Select(x => x.ToString()) == Maybe.Some("17")
-
-If the source maybe is none, then any result will also be none
-
-    Maybe.None<int>().Select(x => x + 1) == Maybe.None<int>()
-
-    Maybe.None<int>().Select(x => x.ToString) == Maybe.None<string>()
-
-You can also write this using the fluent LINQ syntax
-
-    var y = from x in Maybe.Some(42)
-            select x + 1
-
 ### ValueOrDefault
 
-A safe way of unboxing a maybe is to use ValueOrDefault, allowing you to specify a default value is the maybe is None.
+A safe way of unboxing a maybe is to use ValueOrDefault, allowing you to specify a default value if the maybe is None.
 
 Getting the value of Some value type:
 
@@ -80,6 +61,39 @@ If the creation of the default value is expensive, you can wrap that in a callba
 
     Maybe.None<int>().ValueOrDefault(() => new Random().Next()) == a random number
 
+### Select
+
+Much like using LINQ on enumerable collection, you can use LINQ on a maybe to transform any value that might be inside the maybe.
+
+    Maybe.Some(42).Select(x => x + 1) == Maybe.Some(43)
+
+    Maybe.Some(17).Select(x => "It is " + x.ToString()) == Maybe.Some("It is 17")
+
+If the source maybe is none, then any result will also be none
+
+    Maybe.None<int>().Select(x => x + 1) == Maybe.None<int>()
+
+    Maybe.None<int>().Select(x => x.ToString) == Maybe.None<string>()
+
+You can also write this using the fluent LINQ syntax
+
+    (from x in Maybe.Some(17)
+     select "It is " + x) == Maybe.Some("It is 17")
+
+### Select Many
+
+When the result of a select is another maybe, you end up with a `Maybe<Maybe<T>>`, this can simply be flattened down to `Maybe<T>`.
+
+    Maybe.Some(42)
+        .SelectMany(x => x.ToString().ToMaybe()) == Maybe.Some("42")
+
+    Maybe.Some(42)
+        .SelectMany(x => Maybe.None<string>()) == Maybe.None<string>()
+
+Select many can also be applied without passing a selector if you are not changing the underlying value type. You can flatten up to 7 levels of maybe at once.
+
+    Maybe.Some(Maybe.Some(42)).SelectMany() == Maybe.Some(42)
+
 ### Match
 
 You can think of this like a glorified if-then-else using lambdas. Both possible branches of the match must have the same return.
@@ -88,21 +102,10 @@ Returning a value (func's):
 
     Maybe.Some("Request").Match(
         withSome: v => v + " Reponse",
-        withNone: () => "404 Not Found")
+        withNone: () => "404 Not Found") == "Request Response"
 
 Non returning (actions):
 
-    Maybe.Some("Message").Match(
-        withSome: v => ProcessMessage(v),
-        withNone: () => throw new Exception())
-
-### Select Many
-
-When the result of a select is another maybe, you end up with a `Maybe<Maybe<T>>`, this can simply be flattened down to `Maybe<T>`.
-
-    Maybe.Some(42).SelectMany(x => x.ToString().ToMaybe()) == Maybe.Some("42")
-    Maybe.Some(42).SelectMany(x => Maybe.None<string>()) == Maybe.None<string>()
-
-Select many can also be applied without passing a selector if you are not changing the underlying value type. You can flatten up to 7 levels of maybe at once.
-
-    Maybe.Some(Maybe.Some(42)).SelectMany() == Maybe.Some(42)
+    Maybe.Some(42).Match(
+        withSome: v => Console.WriteLine("Value is " + v)
+        withNone: () => Console.WriteLine("Value is missing")) // Writes "Value is 42"
