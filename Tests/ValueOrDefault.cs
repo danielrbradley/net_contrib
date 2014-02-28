@@ -1,4 +1,4 @@
-﻿namespace Tests.MaybeTests
+﻿namespace Tests
 {
     using System;
 

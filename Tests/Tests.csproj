@@ -50,21 +50,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="MaybeTests\Flatten.cs" />
-    <Compile Include="MaybeTests\Conversion.cs" />
-    <Compile Include="MaybeTests\Match.cs" />
-    <Compile Include="MaybeTests\Select.cs" />
-    <Compile Include="MaybeTests\ValueOrDefault.cs" />
-    <Compile Include="MaybeTests\Core.cs" />
+    <Compile Include="Flatten.cs" />
+    <Compile Include="Conversion.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="Select.cs" />
+    <Compile Include="ValueOrDefault.cs" />
+    <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\System.Contrib\System.Contrib.csproj">
+    <ProjectReference Include="..\Yam\Yam.csproj">
       <Project>{dee9d1f8-e689-4607-888f-f3b95e00550e}</Project>
-      <Name>System.Contrib</Name>
+      <Name>Yam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

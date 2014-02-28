@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DanielBradley.Contrib Tests")]
-[assembly: AssemblyDescription("Automated tests for Daniel Bradley's Contrib library")]
+[assembly: AssemblyTitle("YAM Tests")]
+[assembly: AssemblyDescription("Automated tests for Yet Another Maybe library")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DanielBradley.Contrib")]
+[assembly: AssemblyProduct("YAM")]
 [assembly: AssemblyCopyright("Copyright © Daniel Bradley 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
