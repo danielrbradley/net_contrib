@@ -252,7 +252,7 @@
         /// <returns>
         /// A <see cref="System.Maybe&lt;TValue&gt;">maybe</see> whose type argument is TValue.
         /// </returns>
-        public static Maybe<TValue> FromNullable<TValue>(TValue? obj)
+        public static Maybe<TValue> ToMaybe<TValue>(TValue? obj)
            where TValue : struct
         {
             if (obj == null)
@@ -275,7 +275,7 @@
         /// <returns>
         /// A <see cref="System.Maybe&lt;TValue&gt;">maybe</see> whose type argument is TValue.
         /// </returns>
-        public static Maybe<TValue> FromNullable<TValue>(TValue obj)
+        public static Maybe<TValue> ToMaybe<TValue>(TValue obj)
             where TValue : class
         {
             if (obj == null)
@@ -492,7 +492,7 @@
         }
 
         /// <summary>
-        /// Gets the value inside the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> Some, or thows an exception if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
+        /// Gets the value inside the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> Some, or throws an exception if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
         /// </summary>
         /// <exception cref="InvalidOperationException">
         /// The maybe is None.
