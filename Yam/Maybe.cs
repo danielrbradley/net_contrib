@@ -126,6 +126,32 @@
         }
 
         /// <summary>
+        /// Projects the maybe into a new form.
+        /// </summary>
+        /// <typeparam name="TValue">
+        /// The type of the value of <paramref name="source"/>.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type of the value returned by <paramref name="selector"/>.
+        /// </typeparam>
+        /// <param name="source">
+        /// A <see cref="System.Maybe&lt;TValue&gt;">Maybe</see> to apply the transform function to.
+        /// </param>
+        /// <param name="selector">
+        /// A transform function to apply to the <see cref="System.Maybe&lt;TValue&gt;">Maybe</see>.
+        /// </param>
+        /// <returns>
+        /// The flattened result of invoking the <paramref name="selector"/> function to the value of <paramref name="source"/> if it is Some,
+        /// or None if <paramref name="source"/> is None.
+        /// </returns>
+        public static Maybe<TResult> SelectMany<TValue, TResult>(
+            this Maybe<TValue> source,
+            Func<TValue, Maybe<TResult>> selector)
+        {
+            return source.Select(selector).Flatten();
+        }
+
+        /// <summary>
         /// Returns the value of the maybe, or a default value value if the maybe is None.
         /// </summary>
         /// <typeparam name="TValue">
