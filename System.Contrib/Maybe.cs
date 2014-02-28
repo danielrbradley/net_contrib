@@ -252,7 +252,7 @@
         /// <returns>
         /// A <see cref="System.Maybe&lt;TValue&gt;">maybe</see> whose type argument is TValue.
         /// </returns>
-        public static Maybe<TValue> ToMaybe<TValue>(TValue? obj)
+        public static Maybe<TValue> ToMaybe<TValue>(this TValue? obj)
            where TValue : struct
         {
             if (obj == null)
@@ -275,7 +275,7 @@
         /// <returns>
         /// A <see cref="System.Maybe&lt;TValue&gt;">maybe</see> whose type argument is TValue.
         /// </returns>
-        public static Maybe<TValue> ToMaybe<TValue>(TValue obj)
+        public static Maybe<TValue> ToMaybe<TValue>(this TValue obj)
             where TValue : class
         {
             if (obj == null)
@@ -565,21 +565,6 @@
         {
             return !object.Equals(left, right);
         }
-
-        ////public static implicit operator Maybe<TValue>(TValue obj)
-        ////{
-        ////    if (typeof(TValue).IsValueType)
-        ////    {
-        ////        return new Maybe<TValue>(obj);
-        ////    }
-
-        ////    if (obj == null)
-        ////    {
-        ////        return new Maybe<TValue>();
-        ////    }
-
-        ////    return new Maybe<TValue>(obj);
-        ////}
 
         /// <summary>
         /// Returns the text representation of the value of the current <see cref="System.Maybe&lt;TValue&gt;"/> object.

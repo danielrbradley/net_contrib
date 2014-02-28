@@ -11,7 +11,7 @@
         public void SomeFromStruct()
         {
             int? nullableStruct = 42;
-            var maybe = Maybe.ToMaybe(nullableStruct);
+            var maybe = nullableStruct.ToMaybe();
             Assert.AreEqual(Maybe.Some(42), maybe);
         }
 
@@ -20,7 +20,7 @@
         {
             int? nullableStruct = null;
             // ReSharper disable once ExpressionIsAlwaysNull
-            var maybe = Maybe.ToMaybe(nullableStruct);
+            var maybe = nullableStruct.ToMaybe();
             Assert.AreEqual(Maybe.None<int>(), maybe);
         }
 
@@ -29,7 +29,7 @@
         {
             // ReSharper disable once ConvertToConstant.Local
             var nullable = "Hello World";
-            var maybe = Maybe.ToMaybe(nullable);
+            var maybe = nullable.ToMaybe();
             Assert.AreEqual(Maybe.Some("Hello World"), maybe);
         }
 
@@ -38,7 +38,7 @@
         {
             string nullable = null;
             // ReSharper disable once ExpressionIsAlwaysNull
-            var maybe = Maybe.ToMaybe(nullable);
+            var maybe = nullable.ToMaybe();
             Assert.AreEqual(Maybe.None<string>(), maybe);
         }
 
