@@ -1,7 +1,9 @@
-﻿namespace System
+﻿// ReSharper disable CompareNonConstrainedGenericWithNull
+namespace System
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// LINQ style extension methods for working with the Maybe monad.
@@ -36,6 +38,8 @@
         /// </returns>
         public static Maybe<TValue> Some<TValue>(TValue value)
         {
+            Contract.Requires(value != null);
+
             return new Maybe<TValue>(value);
         }
 
@@ -62,7 +66,15 @@
             this Maybe<TValue> source,
             Func<TValue, TValueResult> selector)
         {
-            return source.IsSome ? new Maybe<TValueResult>(selector(source.Value)) : new Maybe<TValueResult>();
+            Contract.Requires(source != null);
+            Contract.Requires(selector != null);
+
+            if (source.IsSome)
+            {
+                return new Maybe<TValueResult>(selector(source.Value));
+            }
+
+            return new Maybe<TValueResult>();
         }
 
         /// <summary>
@@ -92,7 +104,16 @@
             Func<TValue, TValueResult> selector,
             TValueResult defaultValue)
         {
-            return source.IsSome ? selector(source.Value) : defaultValue;
+            Contract.Requires(source != null);
+            Contract.Requires(selector != null);
+            Contract.Requires(defaultValue != null);
+
+            if (source.IsNone)
+            {
+                return defaultValue;
+            }
+
+            return selector(source.Value);
         }
 
         /// <summary>
@@ -122,7 +143,16 @@
             Func<TValue, TValueResult> selector,
             Func<TValueResult> defaultValue)
         {
-            return source.Match(selector, defaultValue);
+            Contract.Requires(source != null);
+            Contract.Requires(selector != null);
+            Contract.Requires(defaultValue != null);
+
+            if (source.IsNone)
+            {
+                return defaultValue();
+            }
+
+            return selector(source.Value);
         }
 
         /// <summary>
@@ -148,16 +178,15 @@
             this Maybe<TValue> source,
             Func<TValue, Maybe<TResult>> selector)
         {
-            if (source.IsSome)
+            Contract.Requires(source != null);
+            Contract.Requires(selector != null);
+
+            if (source.IsNone)
             {
-                var result = selector(source.Value);
-                if (result.IsSome)
-                {
-                    return result;
-                }
+                return Maybe.None<TResult>();
             }
 
-            return Maybe.None<TResult>();
+            return selector(source.Value);
         }
 
         /// <summary>
@@ -176,12 +205,14 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<TValue>> source)
         {
-            if (source.IsSome && source.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone)
             {
-                return Some(source.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value);
         }
 
         /// <summary>
@@ -200,12 +231,14 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<TValue>>> source)
         {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone)
             {
-                return Some(source.Value.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value.Value);
         }
 
         /// <summary>
@@ -224,12 +257,14 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> source)
         {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone)
             {
-                return Some(source.Value.Value.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value.Value.Value);
         }
 
         /// <summary>
@@ -248,13 +283,15 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> source)
         {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
+                || source.Value.Value.Value.Value.IsNone)
             {
-                return Some(source.Value.Value.Value.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value.Value.Value.Value);
         }
 
         /// <summary>
@@ -273,13 +310,15 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> source)
         {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
+                || source.Value.Value.Value.Value.IsNone || source.Value.Value.Value.Value.Value.IsNone)
             {
-                return Some(source.Value.Value.Value.Value.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value.Value.Value.Value.Value);
         }
 
         /// <summary>
@@ -298,14 +337,16 @@
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> source)
         {
-            if (source.IsSome && source.Value.IsSome && source.Value.Value.IsSome && source.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.IsSome && source.Value.Value.Value.Value.Value.IsSome
-                && source.Value.Value.Value.Value.Value.Value.IsSome)
+            Contract.Requires(source != null);
+
+            if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
+                || source.Value.Value.Value.Value.IsNone || source.Value.Value.Value.Value.Value.IsNone
+                || source.Value.Value.Value.Value.Value.Value.IsNone)
             {
-                return Some(source.Value.Value.Value.Value.Value.Value.Value);
+                return None<TValue>();
             }
 
-            return None<TValue>();
+            return Some(source.Value.Value.Value.Value.Value.Value.Value);
         }
 
         /// <summary>
@@ -325,6 +366,8 @@
         /// </returns>
         public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, TValue defaultValue = default(TValue))
         {
+            Contract.Requires(source != null);
+
             if (source.IsSome)
             {
                 return source.Value;
@@ -351,6 +394,9 @@
         /// </returns>
         public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, Func<TValue> defaultValue)
         {
+            Contract.Requires(source != null);
+            Contract.Requires(defaultValue != null);
+
             if (source.IsSome)
             {
                 return source.Value;
@@ -385,6 +431,10 @@
             Func<TValue, TValueResult> withSome,
             Func<TValueResult> withNone)
         {
+            Contract.Requires(source != null);
+            Contract.Requires(withSome != null);
+            Contract.Requires(withNone != null);
+
             if (source.IsSome)
             {
                 return withSome(source.Value);
@@ -413,6 +463,10 @@
             Action<TValue> withSome,
             Action withNone)
         {
+            Contract.Requires(source != null);
+            Contract.Requires(withSome != null);
+            Contract.Requires(withNone != null);
+
             if (source.IsSome)
             {
                 withSome(source.Value);
@@ -522,6 +576,8 @@
         /// </param>
         public Maybe(TValue value)
         {
+            Contract.Requires(value != null);
+
             this.value = value;
             this.isSome = true;
         }
@@ -541,7 +597,7 @@
                     return this.value;
                 }
 
-                throw new InvalidOperationException("TValuehe HasValue property is false");
+                throw new InvalidOperationException("The HasValue property is false");
             }
         }
 
@@ -631,6 +687,8 @@
         /// </returns>
         public bool Equals(Maybe<TValue> other)
         {
+            Contract.Requires(other != null);
+
             return this.isSome.Equals(other.isSome) && EqualityComparer<TValue>.Default.Equals(this.value, other.value);
         }
 
@@ -677,3 +735,4 @@
         }
     }
 }
+// ReSharper restore CompareNonConstrainedGenericWithNull
