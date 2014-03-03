@@ -6,6 +6,92 @@ namespace System
     using System.Diagnostics.Contracts;
 
     /// <summary>
+    /// The Maybe monad used to represent nullable values in a safe manner.
+    /// </summary>
+    /// <typeparam name="TValue">
+    /// The underlying type of the nullable value.
+    /// </typeparam>
+    public struct Maybe<TValue>
+    {
+        private readonly TValue value;
+
+        private readonly bool isSome;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="System.Maybe&lt;TValue&gt;"/> struct.
+        /// </summary>
+        /// <param name="value">
+        /// The value wrapped inside the maybe.
+        /// </param>
+        public Maybe(TValue value)
+        {
+            Contract.Requires(value != null);
+
+            this.value = value;
+            this.isSome = true;
+        }
+
+        /// <summary>
+        /// Gets the value inside the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> Some, or throws an exception if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// The maybe is None.
+        /// </exception>
+        public TValue Value
+        {
+            get
+            {
+                if (this.isSome)
+                {
+                    return this.value;
+                }
+
+                throw new InvalidOperationException("The HasValue property is false");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="System.Maybe&lt;TValue&gt;">maybe</see> object is Some.
+        /// </summary>
+        public bool IsSome
+        {
+            get
+            {
+                return this.isSome;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the current <see cref="System.Maybe&lt;TValue&gt;">maybe</see> object is None.
+        /// </summary>
+        public bool IsNone
+        {
+            get
+            {
+                return !this.isSome;
+            }
+        }
+
+        /// <summary>
+        /// Returns the text representation of the value of the current <see cref="System.Maybe&lt;TValue&gt;"/> object.
+        /// </summary>
+        /// <returns>
+        /// A text representation of the value of the current <see cref="System.Maybe&lt;TValue&gt;"/> object 
+        /// wrapped in ("Some{0}") if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is Some, 
+        /// or the string ("None") if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
+        /// </returns>
+        public override string ToString()
+        {
+            if (this.IsSome)
+            {
+                return string.Format("Some({0})", this.Value);
+            }
+
+            return "None";
+        }
+    }
+
+    /// <summary>
     /// LINQ style extension methods for working with the Maybe monad.
     /// </summary>
     public static class Maybe
@@ -66,7 +152,6 @@ namespace System
             this Maybe<TValue> source,
             Func<TValue, TValueResult> selector)
         {
-            Contract.Requires(source != null);
             Contract.Requires(selector != null);
 
             if (source.IsSome)
@@ -104,7 +189,6 @@ namespace System
             Func<TValue, TValueResult> selector,
             TValueResult defaultValue)
         {
-            Contract.Requires(source != null);
             Contract.Requires(selector != null);
             Contract.Requires(defaultValue != null);
 
@@ -143,7 +227,6 @@ namespace System
             Func<TValue, TValueResult> selector,
             Func<TValueResult> defaultValue)
         {
-            Contract.Requires(source != null);
             Contract.Requires(selector != null);
             Contract.Requires(defaultValue != null);
 
@@ -178,7 +261,6 @@ namespace System
             this Maybe<TValue> source,
             Func<TValue, Maybe<TResult>> selector)
         {
-            Contract.Requires(source != null);
             Contract.Requires(selector != null);
 
             if (source.IsNone)
@@ -205,8 +287,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<TValue>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone)
             {
                 return None<TValue>();
@@ -254,7 +334,6 @@ namespace System
             Func<TSource, Maybe<TSelected>> maybeSelector,
             Func<TSource, TSelected, TResult> resultSelector)
         {
-            Contract.Requires(source != null);
             Contract.Requires(maybeSelector != null);
             Contract.Requires(resultSelector != null);
 
@@ -288,8 +367,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<TValue>>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone)
             {
                 return None<TValue>();
@@ -314,8 +391,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<TValue>>>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone)
             {
                 return None<TValue>();
@@ -340,8 +415,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
                 || source.Value.Value.Value.Value.IsNone)
             {
@@ -367,8 +440,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
                 || source.Value.Value.Value.Value.IsNone || source.Value.Value.Value.Value.Value.IsNone)
             {
@@ -394,8 +465,6 @@ namespace System
         /// </returns>
         public static Maybe<TValue> SelectMany<TValue>(this Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<Maybe<TValue>>>>>>> source)
         {
-            Contract.Requires(source != null);
-
             if (source.IsNone || source.Value.IsNone || source.Value.Value.IsNone || source.Value.Value.Value.IsNone
                 || source.Value.Value.Value.Value.IsNone || source.Value.Value.Value.Value.Value.IsNone
                 || source.Value.Value.Value.Value.Value.Value.IsNone)
@@ -423,8 +492,6 @@ namespace System
         /// </returns>
         public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, TValue defaultValue = default(TValue))
         {
-            Contract.Requires(source != null);
-
             if (source.IsSome)
             {
                 return source.Value;
@@ -451,7 +518,6 @@ namespace System
         /// </returns>
         public static TValue ValueOrDefault<TValue>(this Maybe<TValue> source, Func<TValue> defaultValue)
         {
-            Contract.Requires(source != null);
             Contract.Requires(defaultValue != null);
 
             if (source.IsSome)
@@ -488,7 +554,6 @@ namespace System
             Func<TValue, TValueResult> withSome,
             Func<TValueResult> withNone)
         {
-            Contract.Requires(source != null);
             Contract.Requires(withSome != null);
             Contract.Requires(withNone != null);
 
@@ -520,7 +585,6 @@ namespace System
             Action<TValue> withSome,
             Action withNone)
         {
-            Contract.Requires(source != null);
             Contract.Requires(withSome != null);
             Contract.Requires(withNone != null);
 
@@ -601,194 +665,6 @@ namespace System
             }
 
             return null;
-        }
-    }
-
-    /// <summary>
-    /// The Maybe monad used to represent nullable values in a safe manner.
-    /// </summary>
-    /// <typeparam name="TValue">
-    /// The underlying type of the nullable value.
-    /// </typeparam>
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
-    public sealed class Maybe<TValue>
-    {
-        private readonly TValue value;
-
-        private readonly bool isSome;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Maybe&lt;TValue&gt;"/> class to represent None.
-        /// </summary>
-        public Maybe()
-        {
-            this.isSome = false;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="System.Maybe&lt;TValue&gt;"/> class to represent Some value.
-        /// </summary>
-        /// <param name="value">
-        /// The value wrapped inside the maybe.
-        /// </param>
-        public Maybe(TValue value)
-        {
-            Contract.Requires(value != null);
-
-            this.value = value;
-            this.isSome = true;
-        }
-
-        /// <summary>
-        /// Gets the value inside the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> Some, or throws an exception if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">
-        /// The maybe is None.
-        /// </exception>
-        public TValue Value
-        {
-            get
-            {
-                if (this.isSome)
-                {
-                    return this.value;
-                }
-
-                throw new InvalidOperationException("The HasValue property is false");
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the current <see cref="System.Maybe&lt;TValue&gt;">maybe</see> object is Some.
-        /// </summary>
-        public bool IsSome
-        {
-            get
-            {
-                return this.isSome;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the current <see cref="System.Maybe&lt;TValue&gt;">maybe</see> object is None.
-        /// </summary>
-        public bool IsNone
-        {
-            get
-            {
-                return !this.isSome;
-            }
-        }
-
-        /// <summary>
-        /// Indicates whether two System.Type objects are equal.
-        /// </summary>
-        /// <param name="left">
-        /// The first object to compare.
-        /// </param>
-        /// <param name="right">
-        /// The second object to compare.
-        /// </param>
-        /// <returns>
-        /// true if left is equal to right; otherwise, false.
-        /// </returns>
-        public static bool operator ==(Maybe<TValue> left, Maybe<TValue> right)
-        {
-            return object.Equals(left, right);
-        }
-
-        /// <summary>
-        /// Indicates whether two System.Type objects are not equal.
-        /// </summary>
-        /// <param name="left">
-        /// The first object to compare.
-        /// </param>
-        /// <param name="right">
-        /// The second object to compare.
-        /// </param>
-        /// <returns>
-        /// true if left is note equal to right; otherwise, false.
-        /// </returns>
-        public static bool operator !=(Maybe<TValue> left, Maybe<TValue> right)
-        {
-            return !object.Equals(left, right);
-        }
-
-        /// <summary>
-        /// Returns the text representation of the value of the current <see cref="System.Maybe&lt;TValue&gt;"/> object.
-        /// </summary>
-        /// <returns>
-        /// A text representation of the value of the current <see cref="System.Maybe&lt;TValue&gt;"/> object 
-        /// wrapped in ("Some{0}") if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is Some, 
-        /// or the string ("None") if the <see cref="System.Maybe&lt;TValue&gt;">maybe</see> is None.
-        /// </returns>
-        public override string ToString()
-        {
-            if (this.IsSome)
-            {
-                return string.Format("Some({0})", this.Value);
-            }
-
-            return "None";
-        }
-
-        /// <summary>
-        /// Determines if the underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/> is 
-        /// the same as the underlying value of the specified <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </summary>
-        /// <param name="other">
-        /// The object whose underlying value is to be compared with the underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// true if the underlying value of <paramref name="other"/> is the same as the underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/>; otherwise, false.
-        /// </returns>
-        public bool Equals(Maybe<TValue> other)
-        {
-            Contract.Requires(other != null);
-
-            return this.isSome.Equals(other.isSome) && EqualityComparer<TValue>.Default.Equals(this.value, other.value);
-        }
-
-        /// <summary>
-        /// Determines if the underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/> is 
-        /// the same as the underlying value of the specified <see cref="System.Object"/>.
-        /// </summary>
-        /// <param name="obj">
-        /// The object whose underlying value is to be compared with the underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/>.
-        /// </param>
-        /// <returns>
-        /// true if the underlying value of <paramref name="obj"/> is the same as the 
-        /// underlying value of the current <see cref="System.Maybe&lt;TValue&gt;"/>; otherwise, false.
-        /// This method also returns false if the object specified by the <paramref name="obj"/> 
-        /// parameter is not a <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
-        /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            return obj is Maybe<TValue> && this.Equals((Maybe<TValue>)obj);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// The hash code for this instance.
-        /// </returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (EqualityComparer<TValue>.Default.GetHashCode(this.value) * 397) ^ this.isSome.GetHashCode();
-            }
         }
     }
 }
