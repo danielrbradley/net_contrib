@@ -64,6 +64,61 @@
         }
 
         [TestMethod]
+        public void LinqSomeSome()
+        {
+            var result = from a in Maybe.Some(17)
+                         from b in Maybe.Some(42)
+                         select a + b;
+            Assert.AreEqual(Maybe.Some(59), result);
+        }
+
+        [TestMethod]
+        public void LinqSomeNone()
+        {
+            var result = from a in Maybe.Some(17)
+                         from b in Maybe.None<int>()
+                         select a + b;
+            Assert.AreEqual(Maybe.None<int>(), result);
+        }
+
+        [TestMethod]
+        public void LinqNoneSome()
+        {
+            var result = from a in Maybe.None<int>()
+                         from b in Maybe.Some(42)
+                         select a + b;
+            Assert.AreEqual(Maybe.None<int>(), result);
+        }
+
+        [TestMethod]
+        public void LinqNoneNone()
+        {
+            var result = from a in Maybe.None<int>()
+                         from b in Maybe.None<int>()
+                         select a + b;
+            Assert.AreEqual(Maybe.None<int>(), result);
+        }
+
+        [TestMethod]
+        public void LinqMixedTypes()
+        {
+            var result = from a in Maybe.Some("Hello world")
+                         from b in Maybe.Some(42)
+                         select string.Join(" ", a, b);
+            Assert.AreEqual(Maybe.Some("Hello world 42"), result);
+        }
+
+        [TestMethod]
+        public void Linq3Levels()
+        {
+            var result = from a in Maybe.Some(17)
+                         from b in Maybe.Some(42)
+                         from c in Maybe.Some(53)
+                         select a + b + c;
+            Assert.AreEqual(Maybe.Some(112), result);
+        }
+
+        [TestMethod]
         public void Nesting3Levels()
         {
             var nested = Maybe.Some(Maybe.Some(Maybe.Some(42)));

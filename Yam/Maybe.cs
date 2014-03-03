@@ -216,6 +216,63 @@ namespace System
         }
 
         /// <summary>
+        /// Projects the optional value of a <see cref="System.Maybe&lt;TSource1&gt;"/>
+        /// to a <see cref="System.Maybe&lt;TSelected&gt;"/>, flattens the resulting nested
+        /// maybe into one <see cref="System.Maybe&lt;TSelected&gt;"/> and invokes a result
+        /// selector function on the optional value.
+        /// </summary>
+        /// <param name="source">
+        /// A maybe of a value to project from.
+        /// </param>
+        /// <param name="maybeSelector">
+        /// A transform funciton to apply to the optional value of the input 
+        /// <see cref="System.Maybe&lt;TResult&gt;">maybe</see>.
+        /// </param>
+        /// <param name="resultSelector">
+        /// A transform function to apply to the optional value of the intermediate 
+        /// <see cref="System.Maybe&lt;TResult&gt;">maybe</see>.
+        /// </param>
+        /// <typeparam name="TSource">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// <typeparam name="TSelected">
+        /// The type of the internediate maybe value projected by the 
+        /// <paramref name="maybeSelector"/>.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        /// The type of the value of the resulting 
+        /// <see cref="System.Maybe&lt;TResult&gt;">maybe</see>
+        /// </typeparam>
+        /// <returns>
+        /// A <see cref="System.Maybe&lt;TResult&gt;"/> whose value is the result of 
+        /// invoking the one-to-one-or-none transform function <paramref name="maybeSelector"/>
+        /// on the value of <paramref name="source"/> and then mapping the optional
+        /// result value and their corresponding source value to a result value.
+        /// </returns>
+        public static Maybe<TResult> SelectMany<TSource, TSelected, TResult>(
+            this Maybe<TSource> source,
+            Func<TSource, Maybe<TSelected>> maybeSelector,
+            Func<TSource, TSelected, TResult> resultSelector)
+        {
+            Contract.Requires(source != null);
+            Contract.Requires(maybeSelector != null);
+            Contract.Requires(resultSelector != null);
+
+            if (source.IsNone)
+            {
+                return None<TResult>();
+            }
+
+            var maybe = maybeSelector(source.Value);
+            if (maybe.IsNone)
+            {
+                return None<TResult>();
+            }
+
+            return Some(resultSelector(source.Value, maybe.Value));
+        }
+
+        /// <summary>
         /// Constructs a <see cref="System.Maybe&lt;TValue&gt;">maybe</see> 
         /// from a nested <see cref="System.Maybe&lt;TValue&gt;">maybe</see>.
         /// </summary>
