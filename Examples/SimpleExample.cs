@@ -11,9 +11,41 @@
             // ReSharper disable SuggestUseVarKeywordEvident
             // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
+            ////// Creating a maybe //////
+
+            Console.WriteLine(
+                Maybe.Some("Hello, world!"));
+            // Some(Hello, world!)
+
+            Console.WriteLine(
+                Maybe.None<string>());
+            // None
+
+
+
+            ////// LINQ Projections //////
+
+            Console.WriteLine(
+                from hello in Maybe.Some("Hello")
+                select hello + ", world!");
+            // Some(Hello, world!)
+
+            Console.WriteLine(
+                from hello in Maybe.Some("Hello")
+                from world in Maybe.Some("world!")
+                select hello + ", " + world);
+            // Some(Hello, world!)
+
+            Console.WriteLine(
+                from hello in Maybe.Some("Hello")
+                from world in Maybe.None<string>()
+                select hello + ", " + world);
+            // None
+
 
 
             ////// To Maybe //////
+
             // Nullable int with value
             int? aNullable = 42;
             Console.WriteLine(
@@ -33,6 +65,30 @@
             string dString = null;
             Console.WriteLine(
                 dString.ToMaybe()); // "None"
+
+
+
+            ////// Properties //////
+
+            Console.WriteLine(
+                Maybe.Some(42).IsSome);
+            // True
+
+            Console.WriteLine(
+                Maybe.Some(42).IsNone);
+            // False
+
+            Console.WriteLine(
+                Maybe.None<int>().IsSome);
+            // False
+
+            Console.WriteLine(
+                Maybe.None<int>().IsNone);
+            // True
+
+            Console.WriteLine(
+                Maybe.Some(42).Value);
+            // 42
 
 
 
