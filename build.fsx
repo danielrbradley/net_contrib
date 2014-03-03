@@ -48,7 +48,7 @@ Target "Test" (fun _ ->
 Target "Package" (fun _ ->
     NuGet (fun p -> 
         { p with
-            Project = "Yam"
+            Project = "YetAnotherMaybe"
             Version = version
             ReleaseNotes = releaseNotes
             OutputPath = packageDir

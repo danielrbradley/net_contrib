@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>YAM</id>
+    <id>@project@</id>
     <version>@build.number@</version>
-    <title>Yet Another Maybe library</title>
+    <title>Yet Another Maybe (YAM) library</title>
     <authors>Daniel Bradley</authors>
     <owners>Daniel Bradley</owners>
     <description>
