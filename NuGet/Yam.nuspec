@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>YAM</id>
+    <version>@build.number@</version>
+    <title>Yet Another Maybe library</title>
+    <authors>Daniel Bradley</authors>
+    <owners>Daniel Bradley</owners>
+    <description>
+      Yet Another Maybe library for the Microsoft .Net framework. A well tested, LINQ compatible implementation of the Maybe(Option) pattern (monad) for C# and VB.Net. This provides an alternative to returning null when a value is not found.
+    </description>
+    <releaseNotes>@releaseNotes@</releaseNotes>
+    <summary>
+      LINQ-compatible Maybe library for C# and VB.Net
+    </summary>
+    <language>en-US</language>
+    <projectUrl>https://github.com/danielrbradley/yam</projectUrl>
+    <iconUrl>https://raw.github.com/danielrbradley/yam/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/BSD-3-Clause</licenseUrl>
+    <copyright>Copyright Daniel Bradley 2014</copyright>
+    <references></references>
+    <tags></tags>
+  </metadata>
+  <files>
+    <file src="..\build\Yam\Yam.dll" target="lib\portable-sl5+wp8+windows8+net40\Yam.dll" />
+    <file src="..\build\Yam\Yam.pdb" target="lib\portable-sl5+wp8+windows8+net40\Yam.pdb" />
+    <file src="..\build\Yam\Yam.xml" target="lib\portable-sl5+wp8+windows8+net40\Yam.xml" />
+  </files>
+</package>

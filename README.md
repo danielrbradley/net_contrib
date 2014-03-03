@@ -125,26 +125,6 @@ You can get to the value directly via the 'Value' property:
 
 **Important:** *If you try to access the value of None, an InvalidOperationException will be thrown.*
 
-### Conversion from using nulls
-
-You can convert any existing reference type or nullable value into a maybe by using the .ToMaybe extension method.
-
-Nullable value-types:
-
-    int? a = 42;
-    a.ToMaybe() == Maybe.Some(42)
-
-    int? b = null;
-    b.ToMaybe() == Maybe.None<int>()
-
-Objects reference-types:
-
-    string c = "Hello world!";
-    c.ToMaybe() == Maybe.Some("Hello world!")
-
-    string d = null;
-    d.ToMaybe() == Maybe.None<string>()
-
 
 ### ValueOrDefault
 
@@ -165,6 +145,28 @@ Specifying your own default when the maybe is None:
 If the creation of the default value is expensive, you can wrap that in a callback:
 
     Maybe.None<int>().ValueOrDefault(() => new Random().Next()) == a random number
+
+
+
+### Conversion from using nulls
+
+You can convert any existing reference type or nullable value into a maybe by using the .ToMaybe extension method.
+
+Nullable value-types:
+
+    int? a = 42;
+    a.ToMaybe() == Maybe.Some(42)
+
+    int? b = null;
+    b.ToMaybe() == Maybe.None<int>()
+
+Objects reference-types:
+
+    string c = "Hello world!";
+    c.ToMaybe() == Maybe.Some("Hello world!")
+
+    string d = null;
+    d.ToMaybe() == Maybe.None<string>()
 
 
 ### Match
